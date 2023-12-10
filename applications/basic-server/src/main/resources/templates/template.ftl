@@ -6,7 +6,7 @@
         <meta name=viewport content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/style/reset.css">
         <link rel="stylesheet" href="/style/style.css">
-        <link rel="icon" type="image/svg" href="/style/favicon.svg">
+        <link rel="icon" type="image/png" href="/style/favicon.png">
         <script src="/js/site.js"></script>
         <title>CSCA 5028 MVP</title>
     </head>
