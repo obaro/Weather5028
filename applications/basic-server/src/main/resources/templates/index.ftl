@@ -5,12 +5,15 @@
             <p>
                 CSCA 5028 Final Project.
             </p>
+            <p>
+                MVP - Echo user input
+            </p>
         </div>
     </section>
     <section>
         <div class="container">
             <p>
-                Echo user input
+                Enter a string below and it will be echoed back.
             </p>
             <form action="/postmvp" method="post">
                 <#-- <input type="text" id="userInput" placeholder="Enter string to be echoed...">
