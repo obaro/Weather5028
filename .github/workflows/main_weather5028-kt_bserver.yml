@@ -49,6 +49,7 @@ jobs:
 
       - name: View directories
         run: |
+          pwd
           ls -R
 
       - name: Deploy to Azure Web App
@@ -58,4 +59,4 @@ jobs:
           app-name: 'Weather5028-kt'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8B643339E7B54873B93DD2617189B1EA }}
-          package: 'applications/basic-server/build/libs/basic-server-1.0-SNAPSHOT.jar'
+          package: 'basic-server-1.0-SNAPSHOT.jar'
