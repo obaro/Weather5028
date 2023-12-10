@@ -9,3 +9,9 @@ function moveCities() {
         }
     }
 }
+
+function displayInput() {
+    var userInput = document.getElementById('userInput').value;
+    
+    document.getElementById('displayArea').innerText = userInput;
+}

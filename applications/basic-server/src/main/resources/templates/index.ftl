@@ -1,5 +1,4 @@
 <#import "template.ftl" as layout />
-
 <@layout.noauthentication>
     <section>
         <div class="container">
@@ -10,6 +9,17 @@
     </section>
 
     <section>
+        <div class="container">
+            <p>
+                Echo user input
+            </p>
+            <input type="text" id="userInput" placeholder="Enter string to be echoed...">
+            <button onclick="displayInput()">Display</button>
+            <p id="displayArea"></p>
+        </div>
+    </section>
+
+    <#--  <section>
         <div class="container">
             <form id="cityForm">
                 <label for="source">Available Cities:</label>
@@ -23,13 +33,10 @@
                     <option value="Berlin">Berlin</option>
                     <option value="Cape Town">Cape Town</option>
                 </select>
-
                 <button type="button" onclick="moveCities()">Move Selected</button>
-
                 <label for="destination">Selected Cities:</label>
                 <select id="destination" multiple></select>
             </form>
         </div>
-    </section>
-
+    </section>  -->
 </@layout.noauthentication>

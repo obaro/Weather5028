@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name=viewport content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/style/reset.css">
-        <link rel="stylesheet" href="/style/style.css?v=" + new Date().getMilliseconds()>
+        <link rel="stylesheet" href="/style/style.css">
         <link rel="icon" type="image/svg" href="/style/favicon.svg">
         <script src="/js/site.js"></script>
         <title>Kotlin ktor starter</title>
