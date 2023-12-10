@@ -44,10 +44,10 @@ jobs:
         with:
           name: basic-server
 
-      - name: View directories
-        run: |
-          pwd
-          ls -R
+      # - name: View directories
+      #   run: |
+      #     pwd
+      #     ls -R
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
