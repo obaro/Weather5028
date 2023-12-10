@@ -5,10 +5,12 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.freemarker.*
 import io.ktor.http.content.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.*
 import io.ktor.util.pipeline.*
 import java.util.*
 
@@ -22,6 +24,23 @@ fun Application.module() {
         get("/") {
             call.respond(FreeMarkerContent("index.ftl", mapOf("headers" to headers())))
         }
+
+        get("/getmvp") {
+            call.respond(FreeMarkerContent("postmvp.ftl", mapOf("headers" to headers(), "userInput" to "This is the input")))
+        }
+
+        get("/postmvp") {
+            call.respond(FreeMarkerContent("postmvp.ftl", mapOf("headers" to headers(), "userInput" to "This is the input")))
+        }
+
+        post("/postmvp") {
+            val parameters = call.receiveParameters()
+            val userInput = parameters["userinput"]?: "This is the input"
+
+
+            call.respond(FreeMarkerContent("postmvp.ftl", mapOf("headers" to headers(), "userInput" to userInput)))
+        }
+
         static("images") { resources("images") }
         static("style") { resources("style") }
         static("js") { resources("js") }

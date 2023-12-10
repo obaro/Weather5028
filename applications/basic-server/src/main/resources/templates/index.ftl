@@ -7,19 +7,23 @@
             </p>
         </div>
     </section>
-
     <section>
         <div class="container">
             <p>
                 Echo user input
             </p>
-            <input type="text" id="userInput" placeholder="Enter string to be echoed...">
-            <button onclick="displayInput()">Display</button>
-            <p id="displayArea"></p>
+            <form action="/postmvp" method="post">
+                <#-- <input type="text" id="userInput" placeholder="Enter string to be echoed...">
+                    <button onclick="displayInput()">Display</button>
+                    <p id="displayArea"></p> -->
+
+                    <label for="userInput">User Input:</label>
+                    <input type="text" id="userinput" name="userinput" placeholder="Enter string to be echoed...">
+                    <input type="submit" value="Submit">
+            </form>
         </div>
     </section>
-
-    <#--  <section>
+    <#-- <section>
         <div class="container">
             <form id="cityForm">
                 <label for="source">Available Cities:</label>
@@ -38,5 +42,5 @@
                 <select id="destination" multiple></select>
             </form>
         </div>
-    </section>  -->
+        </section> -->
 </@layout.noauthentication>

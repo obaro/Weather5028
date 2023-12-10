@@ -15,3 +15,6 @@ function displayInput() {
     
     document.getElementById('displayArea').innerText = userInput;
 }
+
+function postMvpString() {
+}

@@ -13,7 +13,7 @@
     <body>
     <header>
         <div class="container">
-            <h1>Weather Monitor</h1>
+            <h1>Weather Monitor MVP</h1>
         </div>
     </header>
     <section class="callout">
