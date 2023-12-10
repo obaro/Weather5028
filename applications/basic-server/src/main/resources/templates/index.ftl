@@ -4,7 +4,7 @@
     <section>
         <div class="container">
             <p>
-                An example application using Kotlin and Ktor.
+                CSCA 5028 Final Project.
             </p>
         </div>
     </section>

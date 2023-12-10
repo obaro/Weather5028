@@ -24,6 +24,7 @@ fun Application.module() {
         }
         static("images") { resources("images") }
         static("style") { resources("style") }
+        static("js") { resources("js") }
     }
 }
 
