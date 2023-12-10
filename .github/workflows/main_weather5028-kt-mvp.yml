@@ -51,4 +51,4 @@ jobs:
           app-name: 'weather5028-kt-mvp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4E4D526464CC482EB97CE9F8ACECC36C }}
-          package: 'basic-server-1.0-SNAPSHOT.j.jar'
+          package: 'basic-server-1.0-SNAPSHOT.jar'

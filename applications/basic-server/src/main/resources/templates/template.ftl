@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/style/style.css">
         <link rel="icon" type="image/svg" href="/style/favicon.svg">
         <script src="/js/site.js"></script>
-        <title>Kotlin ktor starter</title>
+        <title>CSCA 5028 MVP</title>
     </head>
     <body>
     <header>
@@ -27,7 +27,7 @@
     <footer>
         <div class="container">
             <script>document.write("©" + new Date().getFullYear());</script>
-            Initial Capacity, Inc. All rights reserved.
+            CSCA 5028 Final Project
         </div>
     </footer>
     </body>
