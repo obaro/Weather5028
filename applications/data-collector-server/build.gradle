@@ -5,6 +5,9 @@ apply plugin: 'application'
 mainClassName = "io.collective.start.collector.AppKt"
 
 dependencies {
+    implementation 'org.json:json:20231013'
+
+    implementation project(":components:data-objects")
     implementation project(":components:data-collector")
     implementation project(":components:workflow-support")
 }

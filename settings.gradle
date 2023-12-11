@@ -1,4 +1,4 @@
-rootProject.name = "weather-5028"
+rootProject.name = "dataobjects-5028"
 
 include "applications:basic-server"
 include "applications:data-analyzer-server"
@@ -7,3 +7,7 @@ include "applications:data-collector-server"
 include "components:data-collector"
 include "components:data-analyzer"
 include "components:workflow-support"
+include "components:database-support"
+include "components:data-objects"
+
+include "databases:dataobjects-db"

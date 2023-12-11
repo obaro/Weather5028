@@ -12,7 +12,16 @@ buildscript {
 }
 
 plugins {
+    id "org.flywaydb.flyway" version "10.2.0"
     id "org.jetbrains.kotlin.jvm" version "1.6.21" apply false
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    tasks.withType(Copy).all {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
 }
 
 subprojects {
@@ -45,6 +54,7 @@ subprojects {
 
     sourceSets {
         main.kotlin.srcDir "src/main/kotlin"
+        main.java.srcDirs "src/main/java"
         main.resources.srcDir "src/main/resources"
 
         test.kotlin.srcDir "src/test/kotlin"

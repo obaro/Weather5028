@@ -64,12 +64,12 @@ Building a Docker container and running with Docker.
 
 1.  Build using pack.
     ```bash
-    pack build weather-5028 --builder heroku/buildpacks:20
+    pack build dataobjects-5028 --builder heroku/buildpacks:20
     ```
 
 1.  Run with docker.
     ```bash
-    docker run  -e "PORT=8882" -e "APP=applications/basic-server/build/libs/basic-server-1.0-SNAPSHOT.jar" weather-5028
+    docker run  -e "PORT=8882" -e "APP=applications/basic-server/build/libs/basic-server-1.0-SNAPSHOT.jar" dataobjects-5028
     ```
 
 That's a wrap for now.
