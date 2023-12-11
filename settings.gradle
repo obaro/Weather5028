@@ -1,4 +1,4 @@
-rootProject.name = "kotlin-ktor-starter"
+rootProject.name = "weather-5028"
 
 include "applications:basic-server"
 include "applications:data-analyzer-server"
