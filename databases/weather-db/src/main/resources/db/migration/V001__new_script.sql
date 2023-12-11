@@ -9,8 +9,8 @@ create table locations
 create table weather_snapshot
 (
     location_id         int,
-    time_updated_epoch  timestamp,
-    time_updated        timestamp,
+    time_updated_epoch  int,
+    time_updated        varchar,
     temp_c              Numeric,
     condition_text      varchar,
     condition_icon      varchar,

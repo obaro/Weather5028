@@ -1,14 +1,14 @@
 package test.database
 
-import io.collective.database.DatabaseTemplate
+import io.collective.database.DatabaseFullTemplate
 
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class DatabaseTemplateTest() {
+class DatabaseFullTemplateTest() {
     private val dataSource = testDataSource()
-    private val template = DatabaseTemplate(dataSource)
+    private val template = DatabaseFullTemplate(dataSource)
 
     @Test
     fun testFind() {

@@ -5,8 +5,8 @@ dependencies {
     implementation "org.flywaydb:flyway-core:10.2.0"
     implementation 'org.postgresql:postgresql:42.7.1'
     implementation "org.flywaydb:flyway-database-postgresql:10.2.0"
-
-    implementation(project(":databases:dataobjects-db"))
+    implementation 'org.jetbrains.exposed:exposed-core:0.40.1'
+    implementation 'org.jetbrains.exposed:exposed-jdbc:0.40.1'
 }
 
 tasks.withType(Copy).all {

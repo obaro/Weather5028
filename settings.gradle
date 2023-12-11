@@ -10,4 +10,4 @@ include "components:workflow-support"
 include "components:database-support"
 include "components:data-objects"
 
-include "databases:dataobjects-db"
+include "databases:weather-db"

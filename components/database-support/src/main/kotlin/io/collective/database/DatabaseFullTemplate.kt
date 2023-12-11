@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.util.*
 import javax.sql.DataSource
 
-class DatabaseTemplate(val dataSource: DataSource) {
+class DatabaseFullTemplate(val dataSource: DataSource) {
 
     fun <T> create(sql: String, id: (Long) -> T, vararg params: Any) =
         dataSource.connection.use { connection ->
