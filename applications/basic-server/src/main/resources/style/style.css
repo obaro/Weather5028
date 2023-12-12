@@ -133,7 +133,7 @@ ul {
 }
 
 select {
-    width: 200px; /* Width of the select box */
-    height: 150px; /* Height of the select box */
+    width: 140px; /* Width of the select box */
+    height: 80px; /* Height of the select box */
     font-size: 16px; /* Size of the text */
   }

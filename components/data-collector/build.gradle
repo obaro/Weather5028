@@ -5,7 +5,11 @@ dependencies {
     implementation project(":components:database-support")
     implementation project(":components:data-objects")
 
+    implementation 'org.json:json:20231013'
     implementation 'com.zaxxer:HikariCP:5.1.0'
+    implementation 'org.jetbrains.exposed:exposed-core:0.40.1'
+    implementation 'org.jetbrains.exposed:exposed-jdbc:0.40.1'
+    implementation 'org.jetbrains.exposed:exposed-dao:0.40.1'
 }
 
 tasks.withType(Copy).all {

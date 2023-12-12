@@ -10,9 +10,10 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.util.*
 import io.ktor.util.pipeline.*
 import java.util.*
+
+import io.collective.start.collector.getTestDbCollector
 
 fun Application.module() {
     install(DefaultHeaders)
@@ -25,12 +26,15 @@ fun Application.module() {
             call.respond(FreeMarkerContent("index.ftl", mapOf("headers" to headers())))
         }
 
-        get("/getmvp") {
-            call.respond(FreeMarkerContent("postmvp.ftl", mapOf("headers" to headers(), "userInput" to "This is the input")))
-        }
+        post("/viewcity") {
+            val parameters = call.receiveParameters()
+            val city = parameters["city"]?: "London"
 
-        get("/postmvp") {
-            call.respond(FreeMarkerContent("postmvp.ftl", mapOf("headers" to headers(), "userInput" to "This is the input")))
+            val dbCollector = getTestDbCollector()
+            val location = dbCollector.findLocationByName(city)
+
+            call.respond(FreeMarkerContent("viewcity.ftl", mapOf("headers" to headers(),
+                "city" to city, "location" to location)))
         }
 
         post("/postmvp") {

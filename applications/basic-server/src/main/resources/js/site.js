@@ -10,6 +10,17 @@ function moveCities() {
     }
 }
 
+function submitCity() {
+    var source = document.getElementById('source');
+    for (var i = 0; i < source.options.length; i++) {
+        if (source.options[i].selected) {
+            var option = source.options[i];
+            destination.appendChild(option);
+            i--;
+        }
+    }
+}
+
 function displayInput() {
     var userInput = document.getElementById('userInput').value;
     

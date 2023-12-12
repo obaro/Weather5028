@@ -8,6 +8,8 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import java.util.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -28,10 +30,10 @@ fun Application.module() {
 
 fun main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-//    val port = System.getenv("PORT")?.toInt() ?: 8888
-//    embeddedServer(Netty, port, watchPaths = listOf("data-collector-server"), module = Application::module).start()
+    val port = System.getenv("PORT")?.toInt() ?: 8888
+    embeddedServer(Netty, port, watchPaths = listOf("data-collector-server"), module = Application::module).start()
 
-    getWeatherData()
+//    getWeatherData()
 }
 
 private fun getWeatherData() {

@@ -7,6 +7,11 @@ mainClassName = "io.collective.start.AppKt"
 dependencies {
     implementation "io.ktor:ktor-freemarker:$ktor_version"
     implementation "io.ktor:ktor-jackson:$ktor_version"
+    implementation project(path: ':components:database-support')
+    implementation project(path: ':components:data-collector')
+    implementation project(":components:data-objects")
+
+    implementation(project(":databases:weather-db"))
 }
 
 tasks.withType(Copy).all {

@@ -29,4 +29,19 @@ class DatabaseTemplate(private val db: Database) {
 
             return@transaction mapping(resultSet)
         }
+
+    fun <T> query(sql: String, vararg arguments: Any, mapping: (ResultSet) -> List<T>): List<T>? =
+        transaction(db) {
+            val resultSet = connection.prepareStatement(sql, false).also {
+                for ((index, argument) in arguments.withIndex()) {
+                    it[index + 1] = argument
+                }
+            }.executeQuery()
+
+            if (!resultSet.next()) {
+                return@transaction null
+            }
+
+            return@transaction mapping(resultSet)
+        }
 }

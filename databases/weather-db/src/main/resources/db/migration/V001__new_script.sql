@@ -6,8 +6,9 @@ create table locations
     timezone    varchar not null
 );
 
-create table weather_snapshot
+create table weathersnapshots
 (
+    id                  serial primary key,
     location_id         int,
     time_updated_epoch  int,
     time_updated        varchar,

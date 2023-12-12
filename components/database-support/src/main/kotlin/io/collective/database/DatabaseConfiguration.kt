@@ -1,8 +1,6 @@
-package io.collective.start.collector
+package io.collective.database
 
 import io.collective.database.createDatasource
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
 
 class DatabaseConfiguration(
