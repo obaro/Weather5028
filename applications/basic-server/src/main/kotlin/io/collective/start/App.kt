@@ -1,6 +1,7 @@
 package io.collective.start
 
 import freemarker.cache.ClassTemplateLoader
+import io.collective.database.getDbCollector
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.freemarker.*
@@ -13,9 +14,11 @@ import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import java.util.*
 
-import io.collective.start.collector.getTestDbCollector
-
-fun Application.module() {
+fun Application.module(
+    dbUser: String,
+    dbPassword: String,
+    dbUrl: String,
+    dbPort: String) {
     install(DefaultHeaders)
     install(CallLogging)
     install(FreeMarker) {
@@ -30,11 +33,32 @@ fun Application.module() {
             val parameters = call.receiveParameters()
             val city = parameters["city"]?: "London"
 
-            val dbCollector = getTestDbCollector()
+            val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
             val location = dbCollector.findLocationByName(city)
 
-            call.respond(FreeMarkerContent("viewcity.ftl", mapOf("headers" to headers(),
-                "city" to city, "location" to location)))
+            if(location != null) {
+                val analyzedWeather = dbCollector.getLatestAnalysisForLocation(location.id)
+                if(analyzedWeather != null) {
+                    val range = (analyzedWeather.current_time_epoch - analyzedWeather.prev_time_epoch)/60
+                    call.respond(FreeMarkerContent("viewcity.ftl", mapOf("headers" to headers(),
+                        "city" to city, "location" to location, "analyzed" to analyzedWeather,
+                        "range" to range)))
+                }
+                else {
+                    call.respond(FreeMarkerContent("viewcity.ftl", mapOf("headers" to headers(),
+                        "city" to city, "location" to location)))
+                }
+            }
+            else {
+                call.respond(
+                    FreeMarkerContent(
+                        "viewcity.ftl", mapOf(
+                            "headers" to headers(),
+                            "city" to city
+                        )
+                    )
+                )
+            }
         }
 
         post("/postmvp") {
@@ -62,5 +86,16 @@ private fun PipelineContext<Unit, ApplicationCall>.headers(): MutableMap<String,
 fun main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     val port = System.getenv("PORT")?.toInt() ?: 8888
-    embeddedServer(Netty, port, watchPaths = listOf("basic-server"), module = { module() }).start()
+    val dbUser = System.getenv("DB_USER")
+        ?: throw RuntimeException("Please set the DB_USER environment variable")
+    val dbPassword = System.getenv("DB_PASS")
+        ?: throw RuntimeException("Please set the DB_PASS environment variable")
+    val dbUrl = System.getenv("DB_URL")
+        ?: throw RuntimeException("Please set the DB_URL environment variable")
+    val dbPort = System.getenv("DB_PORT")
+        ?: throw RuntimeException("Please set the DB_PORT environment variable")
+    embeddedServer(Netty, port, watchPaths = listOf("basic-server"),
+        module = { module(
+            dbUser, dbPassword, dbUrl, dbPort
+        ) }).start()
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 class WeatherDataObject (
         val location_id: Int,
-        val time_updated_epoch: Int,
+        val time_updated_epoch: Long,
         val time_updated: String,
         val temp_c: Float,
         val condition_text: String,

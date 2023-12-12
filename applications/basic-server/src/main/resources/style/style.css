@@ -136,4 +136,15 @@ select {
     width: 140px; /* Width of the select box */
     height: 80px; /* Height of the select box */
     font-size: 16px; /* Size of the text */
+}
+
+table {
+    border-collapse: collapse; /* Ensures that the border lines between cells are single lines */
+    width: 100%; /* Optional: Sets the table width to fill the container */
+  }
+  th, td {
+    border: 1px solid black; /* Adds borders around each cell */
+    padding: 3px; /* Sets the padding inside each cell */
+    text-align: left; /* Aligns the text to the left; change as needed */
+    font-size: 1.3em; /* Sets the font size of the text in each cell */
   }

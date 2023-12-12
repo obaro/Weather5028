@@ -16,4 +16,6 @@ class Weather(id: EntityID<Int>) : IntEntity(id) {
     var wind_kph            by WeatherSnapshots.wind_kph
     var feelslike_c         by WeatherSnapshots.feelslike_c
     var vis_km              by WeatherSnapshots.vis_km
+
+    var location         by Location referencedOn WeatherSnapshots.location_id
 }

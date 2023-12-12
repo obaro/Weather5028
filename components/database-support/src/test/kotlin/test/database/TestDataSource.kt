@@ -3,9 +3,6 @@ package test.database
 import io.collective.database.createDatasource
 import javax.sql.DataSource
 import com.zaxxer.hikari.HikariDataSource
-import io.collective.database.DatabaseConfiguration
-import io.collective.database.DatabaseTemplate
-import io.collective.start.collector.DataCollectorDataGateway
 import io.mockk.every
 import io.mockk.mockk
 import java.sql.Connection

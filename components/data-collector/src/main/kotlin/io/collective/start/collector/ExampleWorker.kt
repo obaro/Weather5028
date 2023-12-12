@@ -2,6 +2,7 @@ package io.collective.start.collector
 
 import io.collective.data.objects.LocationDataObject
 import io.collective.data.objects.WeatherDataObject
+import io.collective.database.getDbCollector
 import io.collective.workflow.Worker
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
@@ -13,9 +14,17 @@ import java.nio.charset.StandardCharsets
 
 class ExampleWorker(override val name: String = "data-collector") : Worker<ExampleTask> {
     private val logger = LoggerFactory.getLogger(this.javaClass)
-    private val dbCollector = getTestDbCollector()
-    private val API_KEY = "51c3c1ab748d4bc8918134433231112"
-    private val weatherAPIUrl = "http://api.weatherapi.com/v1/current.json?aqi=no&key=" + API_KEY
+    private val dbUser = System.getenv("DB_USER")
+        ?: throw RuntimeException("Please set the DB_USER environment variable")
+    private val dbPassword = System.getenv("DB_PASS")
+        ?: throw RuntimeException("Please set the DB_PASS environment variable")
+    private val dbUrl = System.getenv("DB_URL")
+        ?: throw RuntimeException("Please set the DB_URL environment variable")
+    private val dbPort = System.getenv("DB_PORT")
+        ?: throw RuntimeException("Please set the DB_PORT environment variable")
+    private val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
+    private val apiKey = System.getenv("WEATHER_API_KEY") //"51c3c1ab748d4bc8918134433231112"
+    private val weatherAPIUrl = "http://api.weatherapi.com/v1/current.json?aqi=no&key=$apiKey"
 
 
     override fun execute(task: ExampleTask) {
@@ -33,10 +42,8 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
         val locations = dbCollector.findAllLocationsNew()
 //        val locations = Location.all()
 
-        if (locations != null) {
-            locations.forEach {
-                    location -> getWeatherData(location)
-            }
+        locations.forEach {
+                location -> getWeatherData(location)
         }
     }
 
@@ -55,7 +62,7 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
                     val conditionObject = currentObject.getJSONObject("condition")
 
                     val weatherData = WeatherDataObject(
-                        time_updated_epoch = currentObject.getInt("last_updated_epoch"),
+                        time_updated_epoch = currentObject.getLong("last_updated_epoch"),
                         time_updated = currentObject.getString("last_updated"),
                         condition_text = conditionObject.getString("text"),
                         condition_icon = conditionObject.getString("icon"),

@@ -18,12 +18,14 @@ fun Application.module() {
             call.respondText("hi!", ContentType.Text.Html)
         }
     }
-    val scheduler = WorkScheduler<ExampleTask>(ExampleWorkFinder(), mutableListOf(ExampleWorker()), 30)
+    val scheduler = WorkScheduler<ExampleTask>(ExampleWorkFinder(),
+        mutableListOf(ExampleWorker()), 30)
     scheduler.start()
 }
 
 fun main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    val port = System.getenv("PORT")?.toInt() ?: 8888
-    embeddedServer(Netty, port, watchPaths = listOf("data-analyzer-server"), module = Application::module).start()
+    val port = System.getenv("PORT")?.toInt() ?: 8881
+    embeddedServer(Netty, port, watchPaths = listOf("data-analyzer-server"),
+        module = { module()}).start()
 }
