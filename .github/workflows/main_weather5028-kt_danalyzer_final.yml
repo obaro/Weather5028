@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: basic-server
-          path: '${{ github.workspace }}/applications/data-analyzer-server/build/libs/data-analyzer-server-1.0-SNAPSHOT.jar'
+          path: '${{ github.workspace }}/applications/data-analyzer-server/build/libs/data-analyzer-server-1.0-SNAPSHOT-all.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,4 +56,4 @@ jobs:
           app-name: 'weather5028-final-da'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9ADDD949EC1347E980DB7EF5ACB58FC4 }}
-          package: 'data-analyzer-server-1.0-SNAPSHOT.jar'
+          package: 'data-analyzer-server-1.0-SNAPSHOT-all.jar'

@@ -19,6 +19,6 @@ class AppTest {
     }
 
     private fun testApp(callback: TestApplicationEngine.() -> Unit) {
-        withTestApplication({ module() }) { callback() }
+        withTestApplication({ module("TestUser", "TestPassword", "TestDB", "5555") }) { callback() }
     }
 }

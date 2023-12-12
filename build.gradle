@@ -14,10 +14,12 @@ buildscript {
 plugins {
     id "org.flywaydb.flyway" version "10.2.0"
     id "org.jetbrains.kotlin.jvm" version "1.6.21" apply false
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     tasks.withType(Copy).all {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE

@@ -20,11 +20,11 @@ dependencies {
 }
 
 tasks.withType(Copy).all {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         attributes "Main-Class": "io.collective.start.collector.AppKt"
     }
