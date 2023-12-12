@@ -10,7 +10,6 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.util.*
 
-
 fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)

@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets
 
 class ExampleWorker(override val name: String = "data-collector") : Worker<ExampleTask> {
     private val logger = LoggerFactory.getLogger(this.javaClass)
+
     private val dbUser = System.getenv("DB_USER")
         ?: throw RuntimeException("Please set the DB_USER environment variable")
     private val dbPassword = System.getenv("DB_PASS")
@@ -23,7 +24,7 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
     private val dbPort = System.getenv("DB_PORT")
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
     private val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
-    private val apiKey = System.getenv("WEATHER_API_KEY") //"51c3c1ab748d4bc8918134433231112"
+    private val apiKey = System.getenv("WEATHER_API_KEY")
     private val weatherAPIUrl = "http://api.weatherapi.com/v1/current.json?aqi=no&key=$apiKey"
 
 
