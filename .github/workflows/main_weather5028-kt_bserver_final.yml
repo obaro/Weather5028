@@ -53,7 +53,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Weather5028-kt'
+          app-name: 'weather5028-final-bs'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8B643339E7B54873B93DD2617189B1EA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A4E4A09DB0854AAF86E6849C3E73D73A }}
           package: 'basic-server-1.0-SNAPSHOT.jar'

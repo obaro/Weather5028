@@ -53,7 +53,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Weather5028-kt'
+          app-name: 'weather5028-final-da'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8B643339E7B54873B93DD2617189B1EA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9ADDD949EC1347E980DB7EF5ACB58FC4 }}
           package: 'data-analyzer-server-1.0-SNAPSHOT.jar'
