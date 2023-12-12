@@ -5,26 +5,16 @@ apply plugin: 'application'
 mainClassName = "io.collective.start.collector.AppKt"
 
 dependencies {
-    implementation 'org.json:json:20231013'
-    implementation 'com.zaxxer:HikariCP:5.1.0'
-    implementation 'org.postgresql:postgresql:42.7.1'
-    implementation 'org.jetbrains.exposed:exposed-core:0.40.1'
-    implementation 'org.jetbrains.exposed:exposed-jdbc:0.40.1'
-
-    implementation project(":components:data-objects")
     implementation project(":components:data-collector")
-    implementation project(":components:database-support")
     implementation project(":components:workflow-support")
-
-    implementation(project(":databases:weather-db"))
 }
 
 tasks.withType(Copy).all {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 jar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes "Main-Class": "io.collective.start.collector.AppKt"
     }
