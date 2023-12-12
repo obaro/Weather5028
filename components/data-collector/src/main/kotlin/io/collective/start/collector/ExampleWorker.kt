@@ -1,5 +1,6 @@
 package io.collective.start.collector
 
+import io.collective.data.getSystemEnv
 import io.collective.data.objects.LocationDataObject
 import io.collective.data.objects.WeatherDataObject
 import io.collective.database.getDbCollector
@@ -15,16 +16,16 @@ import java.nio.charset.StandardCharsets
 class ExampleWorker(override val name: String = "data-collector") : Worker<ExampleTask> {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    private val dbUser = System.getenv("DB_USER")
+    private val dbUser = getSystemEnv("DB_USER")
         ?: throw RuntimeException("Please set the DB_USER environment variable")
-    private val dbPassword = System.getenv("DB_PASS")
+    private val dbPassword = getSystemEnv("DB_PASS")
         ?: throw RuntimeException("Please set the DB_PASS environment variable")
-    private val dbUrl = System.getenv("DB_URL")
+    private val dbUrl = getSystemEnv("DB_URL")
         ?: throw RuntimeException("Please set the DB_URL environment variable")
-    private val dbPort = System.getenv("DB_PORT")
+    private val dbPort = getSystemEnv("DB_PORT")
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
     private val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
-    private val apiKey = System.getenv("WEATHER_API_KEY")
+    private val apiKey = getSystemEnv("WEATHER_API_KEY")
     private val weatherAPIUrl = "http://api.weatherapi.com/v1/current.json?aqi=no&key=$apiKey"
 
 
@@ -41,7 +42,6 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
 
     fun getAllWeatherData() {
         val locations = dbCollector.findAllLocationsNew()
-//        val locations = Location.all()
 
         locations.forEach {
                 location -> getWeatherData(location)
@@ -54,7 +54,7 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
         try {
             val url = URL(weatherAPIUrl + "&q=" + URLEncoder.encode(location.name, StandardCharsets.UTF_8))
             with(url.openConnection() as HttpURLConnection) {
-                requestMethod = "GET"  // Use GET method
+                requestMethod = "GET"
                 inputStream.bufferedReader().use {
                     val response = it.readText()
                     val jsonObject = JSONObject(response)

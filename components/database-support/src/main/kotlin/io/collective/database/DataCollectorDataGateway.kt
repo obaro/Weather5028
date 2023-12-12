@@ -63,20 +63,6 @@ class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
         }
     }
 
-//    fun findWeatherInRange(city: Int, rangeInHours: Int) : List<WeatherDataObject> {
-//        val minimumTime = Instant.now().epochSecond - (rangeInHours * 3600)
-//        val weatherList = mutableListOf<WeatherDataObject>()
-//        transaction {
-//            val weatherVals = Weather.find {
-//                WeatherSnapshots.location_id eq city
-//                WeatherSnapshots.time_updated_epoch greater  minimumTime
-//            }
-//            weatherList.add(mapWeatherToDataObject(weatherVals.first()))
-//            weatherList.add(mapWeatherToDataObject(weatherVals.last()))
-//        }
-//        return weatherList
-//    }
-
     fun findWeatherInRange(city: Int, fromTime: Long) : List<WeatherDataObject> {
         val weatherList = mutableListOf<WeatherDataObject>()
         transaction {
@@ -155,65 +141,6 @@ class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
             current_vis_km = analyzedWeather.current_vis_km
         )
     }
-
-
-//    fun findLocationByName(name: String): LocationDataObject? = dbTemplate.queryOne<LocationDataObject>(
-//        //language=SQL
-//        "select * from locations where name = ?",
-//        name
-//    ) { it.getObject("confirmation_code", LocationDataObject::class.java) }
-
-//    fun findLocationByName(name: String): LocationDataObject? = dbTemplate.queryOne<LocationDataObject>(
-//        //language=SQL
-//        "select * from locations where name = ?",
-//        name
-//    ) { getLocationDataObject(it) }
-//
-//    fun findAllLocationNames(): List<String>? = dbTemplate.query<String>(
-//        //language=SQL
-//        "select * from locations"
-//    ) { getLocationNames(it) }
-//
-//    fun findAllLocations(): List<LocationDataObject>? = dbTemplate.query<LocationDataObject>(
-//        //language=SQL
-//        "select * from locations"
-//    ) { getLocations(it) }
-//
-//    fun getLocations(rows: ResultSet): List<LocationDataObject> {
-//        val names = mutableListOf<LocationDataObject>()
-//        rows.beforeFirst()
-//        while (rows.next()) {
-//            names.add(getLocationDataObject(rows))
-//        }
-//        return names
-//    }
-//
-//    fun getLocationNames(rows: ResultSet): List<String> {
-//        val names = mutableListOf<String>()
-//        rows.beforeFirst()
-//        while (rows.next()) {
-//            names.add(rows.getString("name"))
-//        }
-//        return names
-//    }
-//
-//    fun getLocationDataObject(row: ResultSet): LocationDataObject =
-//        LocationDataObject(
-//            id = row.getInt("id"),
-//            name = row.getString("name"),
-//            country = row.getString("country"),
-//            timezone = row.getString("timezone")
-//        )
-//
-//    fun saveWeatherData(locationId: Int, weatherData: WeatherDataObject) = dbTemplate.execute(
-//        //language=SQL
-//        "insert into weather_snapshot (location_id, time_updated_epoch, time_updated, temp_c, " +
-//                "condition_text, condition_icon, condition_code, wind_kph, feelslike_c, vis_km) values " +
-//                "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-//        weatherData.location_id, weatherData.time_updated_epoch, weatherData.time_updated,
-//        weatherData.temp_c, weatherData.condition_text, weatherData.condition_icon, weatherData.condition_code,
-//        weatherData.wind_kph, weatherData.feelslike_c, weatherData.vis_km
-//    )
 }
 
 fun getDbCollector(
@@ -227,13 +154,3 @@ fun getDbCollector(
     val dbTemplate = DatabaseTemplate(dbConfig.db)
     return DataCollectorDataGateway(dbTemplate)
 }
-
-//fun getTestDbCollector(): DataCollectorDataGateway {
-//    val testJdbcUrl = "jdbc:postgresql://localhost:5555/weather_data"
-//    val testDbUsername = "weather5028"
-//    val testDbPassword = "weather5028"
-//
-//    val dbConfig = DatabaseConfiguration(testJdbcUrl, testDbUsername, testDbPassword)
-//    val dbTemplate = DatabaseTemplate(dbConfig.db)
-//    return DataCollectorDataGateway(dbTemplate)
-//}

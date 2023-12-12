@@ -6,6 +6,8 @@ mainClassName = "io.collective.start.collector.AppKt"
 
 dependencies {
     implementation project(":components:data-collector")
+    implementation project(":components:data-objects")
+    implementation project(":components:database-support")
     implementation project(":components:workflow-support")
 }
 
