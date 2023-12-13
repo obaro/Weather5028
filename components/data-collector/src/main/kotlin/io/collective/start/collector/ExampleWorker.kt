@@ -3,6 +3,7 @@ package io.collective.start.collector
 import io.collective.data.getSystemEnv
 import io.collective.data.objects.LocationDataObject
 import io.collective.data.objects.WeatherDataObject
+import io.collective.database.DataCollectorDataGateway
 import io.collective.database.getDbCollector
 import io.collective.workflow.Worker
 import kotlinx.coroutines.runBlocking
@@ -15,21 +16,12 @@ import java.nio.charset.StandardCharsets
 
 class ExampleWorker(
     private val collectorMessagePublisher: CollectorMessagePublisher,
+    private val dbCollector: DataCollectorDataGateway,
+    private val apiKey: String,
     override val name: String = "data-collector") : Worker<ExampleTask> {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    private val dbUser = System.getenv("DB_USER")
-        ?: throw RuntimeException("Please set the DB_USER environment variable")
-    private val dbPassword = System.getenv("DB_PASS")
-        ?: throw RuntimeException("Please set the DB_PASS environment variable")
-    private val dbUrl = System.getenv("DB_URL")
-        ?: throw RuntimeException("Please set the DB_URL environment variable")
-    private val dbPort = System.getenv("DB_PORT")
-        ?: throw RuntimeException("Please set the DB_PORT environment variable")
-    private val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
-    private val apiKey = System.getenv("WEATHER_API_KEY")
     private val weatherAPIUrl = "http://api.weatherapi.com/v1/current.json?aqi=no&key=$apiKey"
-
 
     override fun execute(task: ExampleTask) {
         runBlocking {

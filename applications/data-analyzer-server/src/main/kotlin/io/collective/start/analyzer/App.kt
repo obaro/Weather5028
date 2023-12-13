@@ -1,6 +1,8 @@
 package io.collective.start.analyzer
 
 import com.rabbitmq.client.ConnectionFactory
+import io.collective.database.DataCollectorDataGateway
+import io.collective.database.getDbCollector
 import io.collective.rabbitsupport.*
 import io.ktor.application.*
 import io.ktor.features.*
@@ -17,7 +19,7 @@ import java.util.*
 
 class App
 
-private val logger = LoggerFactory.getLogger(App::class.java)
+val logger = LoggerFactory.getLogger(App::class.java)
 
 fun Application.module() {
     install(DefaultHeaders)
@@ -27,6 +29,16 @@ fun Application.module() {
             call.respondText("hi!", ContentType.Text.Html)
         }
     }
+
+    val dbUser = System.getenv("DB_USER")
+        ?: throw RuntimeException("Please set the DB_USER environment variable")
+    val dbPassword = System.getenv("DB_PASS")
+        ?: throw RuntimeException("Please set the DB_PASS environment variable")
+    val dbUrl = System.getenv("DB_URL")
+        ?: throw RuntimeException("Please set the DB_URL environment variable")
+    val dbPort = System.getenv("DB_PORT")
+        ?: throw RuntimeException("Please set the DB_PORT environment variable")
+    val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
 
     val connectionFactory = buildConnectionFactory(
         System.getenv("RABBIT_URL")?.let(::URI)
@@ -41,7 +53,7 @@ fun Application.module() {
 
 //    val publishNotification = publish(connectionFactory, registrationNotificationExchange)
     runBlocking {
-        listenForMessages(connectionFactory, registrationNotificationQueue)
+        listenForMessages(connectionFactory, registrationNotificationQueue, dbCollector)
     }
 
 
@@ -57,9 +69,10 @@ fun main() {
         module = { module()}).start()
 }
 
-private suspend fun listenForMessages(
+suspend fun listenForMessages(
     connectionFactory: ConnectionFactory,
-    registrationNotificationQueue: RabbitQueue
+    registrationNotificationQueue: RabbitQueue,
+    dbCollector: DataCollectorDataGateway
 ) {
     val channel = connectionFactory.newConnection().createChannel()
 
@@ -67,6 +80,6 @@ private suspend fun listenForMessages(
         val jsonObject = JSONObject(it)
         val location = jsonObject.getString("location")
         logger.info("Received weather update for $location")
-        AnalyzeLocation().execute(location)
+        AnalyzeLocation(dbCollector).execute(location)
     }
 }

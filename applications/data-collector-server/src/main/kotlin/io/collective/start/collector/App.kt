@@ -1,5 +1,6 @@
 package io.collective.start.collector
 
+import io.collective.database.getDbCollector
 import io.collective.rabbitsupport.*
 import io.collective.workflow.WorkScheduler
 import io.ktor.application.*
@@ -21,6 +22,18 @@ fun Application.module() {
         }
     }
 
+    val dbUser = System.getenv("DB_USER")
+        ?: throw RuntimeException("Please set the DB_USER environment variable")
+    val dbPassword = System.getenv("DB_PASS")
+        ?: throw RuntimeException("Please set the DB_PASS environment variable")
+    val dbUrl = System.getenv("DB_URL")
+        ?: throw RuntimeException("Please set the DB_URL environment variable")
+    val dbPort = System.getenv("DB_PORT")
+        ?: throw RuntimeException("Please set the DB_PORT environment variable")
+    val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
+    val apiKey = System.getenv("WEATHER_API_KEY")
+
+
     val rabbitString = System.getenv("RABBIT_URL")
         ?: throw RuntimeException("Please set the RABBIT_URL environment variable")
     val connectionFactory = buildConnectionFactory(rabbitString.let(::URI)
@@ -37,7 +50,7 @@ fun Application.module() {
     val collectorPublisher = CollectorMessagePublisher(publishFunction)
 
     val scheduler = WorkScheduler<ExampleTask>(ExampleWorkFinder(),
-        mutableListOf(ExampleWorker(collectorPublisher)), 60)
+        mutableListOf(ExampleWorker(collectorPublisher, dbCollector, apiKey)), 60)
     scheduler.start()
 }
 
