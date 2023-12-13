@@ -66,7 +66,7 @@ private suspend fun listenForMessages(
     listen(queue = registrationNotificationQueue, channel = channel) {
         val jsonObject = JSONObject(it)
         val location = jsonObject.getString("location")
-        logger.info("received registration notification {}", location)
+        logger.info("Received weather update for $location")
         AnalyzeLocation().execute(location)
     }
 }
