@@ -13,19 +13,21 @@ import org.json.JSONObject
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-class ExampleWorker(override val name: String = "data-collector") : Worker<ExampleTask> {
+class ExampleWorker(
+    private val collectorMessagePublisher: CollectorMessagePublisher,
+    override val name: String = "data-collector") : Worker<ExampleTask> {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    private val dbUser = System.getenv("DB_USER")
+    private val dbUser = getSystemEnv("DB_USER")
         ?: throw RuntimeException("Please set the DB_USER environment variable")
-    private val dbPassword = System.getenv("DB_PASS")
+    private val dbPassword = getSystemEnv("DB_PASS")
         ?: throw RuntimeException("Please set the DB_PASS environment variable")
-    private val dbUrl = System.getenv("DB_URL")
+    private val dbUrl = getSystemEnv("DB_URL")
         ?: throw RuntimeException("Please set the DB_URL environment variable")
-    private val dbPort = System.getenv("DB_PORT")
+    private val dbPort = getSystemEnv("DB_PORT")
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
     private val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
-    private val apiKey = System.getenv("WEATHER_API_KEY")
+    private val apiKey = getSystemEnv("WEATHER_API_KEY")
     private val weatherAPIUrl = "http://api.weatherapi.com/v1/current.json?aqi=no&key=$apiKey"
 
 
@@ -56,8 +58,12 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
             with(url.openConnection() as HttpURLConnection) {
                 requestMethod = "GET"
                 inputStream.bufferedReader().use {
+                    logger.info("Got weather info for " + location.name)
                     val response = it.readText()
                     val jsonObject = JSONObject(response)
+//                    logger.info("----------------------------------")
+//                    logger.info(jsonObject.toString(4))
+//                    logger.info("----------------------------------")
 
                     val currentObject = jsonObject.getJSONObject("current")
                     val conditionObject = currentObject.getJSONObject("condition")
@@ -76,6 +82,13 @@ class ExampleWorker(override val name: String = "data-collector") : Worker<Examp
                     )
 
                     dbCollector.saveWeather(weatherData)
+//                    if(dbCollector.saveWeather(weatherData)) {
+                        collectorMessagePublisher.publishNotification("${location.id}")
+//                        logger.info("publishing weather info for " + location.name)
+//                    }
+//                    else {
+//                        logger.info("Not publishing weather info for " + location.name)
+//                    }
                 }
             }
         } catch (e: Exception) {

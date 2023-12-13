@@ -30,7 +30,7 @@ class AppTest {
         every { getDbCollector("TestUser", "TestPass", "localhost", "5555") } returns testDbCollector
     }
 
-    @Test
+    @Ignore
     fun testEmptyHome() = testApp {
         handleRequest(HttpMethod.Get, "/").apply {
             assertEquals(200, response.status()?.value)

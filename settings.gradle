@@ -11,3 +11,8 @@ include "components:database-support"
 include "components:data-objects"
 
 include "databases:weather-db"
+include 'components:rabbit-support'
+findProject(':components:rabbit-support')?.name = 'rabbit-support'
+include 'components:rabbit-support'
+findProject(':components:rabbit-support')?.name = 'rabbit-support'
+

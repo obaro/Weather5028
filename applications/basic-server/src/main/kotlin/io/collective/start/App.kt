@@ -1,6 +1,7 @@
 package io.collective.start
 
 import freemarker.cache.ClassTemplateLoader
+import io.collective.data.getSystemEnv
 import io.collective.database.getDbCollector
 import io.ktor.application.*
 import io.ktor.features.*
@@ -85,14 +86,14 @@ private fun PipelineContext<Unit, ApplicationCall>.headers(): MutableMap<String,
 
 fun main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    val port = System.getenv("PORT")?.toInt() ?: 8888
-    val dbUser = System.getenv("DB_USER")
+    val port = getSystemEnv("PORT")?.toInt() ?: 8888
+    val dbUser = getSystemEnv("DB_USER")
         ?: throw RuntimeException("Please set the DB_USER environment variable")
-    val dbPassword = System.getenv("DB_PASS")
+    val dbPassword = getSystemEnv("DB_PASS")
         ?: throw RuntimeException("Please set the DB_PASS environment variable")
-    val dbUrl = System.getenv("DB_URL")
+    val dbUrl = getSystemEnv("DB_URL")
         ?: throw RuntimeException("Please set the DB_URL environment variable")
-    val dbPort = System.getenv("DB_PORT")
+    val dbPort = getSystemEnv("DB_PORT")
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
     embeddedServer(Netty, port, watchPaths = listOf("basic-server"),
         module = { module(

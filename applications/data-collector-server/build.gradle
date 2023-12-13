@@ -5,10 +5,13 @@ apply plugin: 'application'
 mainClassName = "io.collective.start.collector.AppKt"
 
 dependencies {
+    implementation 'com.rabbitmq:amqp-client:5.20.0'
+
     implementation project(":components:data-collector")
     implementation project(":components:data-objects")
     implementation project(":components:database-support")
     implementation project(":components:workflow-support")
+    implementation project(path: ':components:rabbit-support')
 }
 
 tasks.withType(Copy).all {

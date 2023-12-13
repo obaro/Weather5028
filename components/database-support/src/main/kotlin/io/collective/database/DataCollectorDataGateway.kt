@@ -5,8 +5,11 @@ import io.collective.data.objects.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 
 class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
+
+    private val logger = LoggerFactory.getLogger(this.javaClass)
 
     fun findAllLocationsNew() : List<LocationDataObject>{
         val names = mutableListOf<LocationDataObject>()
@@ -22,6 +25,22 @@ class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
             }
         }
         return names
+    }
+
+    fun findLocationById(id: Int) : LocationDataObject? {
+        var locationObject: LocationDataObject? = null
+        transaction {
+            val location = Location.findById(id)
+            if (location != null) {
+                locationObject = LocationDataObject(
+                    id = location.id.value,
+                    name = location.name,
+                    country = location.country,
+                    timezone = location.timezone
+                )
+            }
+        }
+        return locationObject
     }
 
     fun findLocationByName(city: String) : LocationDataObject? {
@@ -40,27 +59,36 @@ class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
         return locationObject
     }
 
-    fun saveWeather(weatherData: WeatherDataObject) {
+    fun saveWeather(weatherData: WeatherDataObject) : Boolean {
+        var updated = false
         transaction {
             val existing = Weather.find{
                 (WeatherSnapshots.time_updated_epoch eq weatherData.time_updated_epoch) and
                 (WeatherSnapshots.location_id eq weatherData.location_id)
             }.firstOrNull()
-            if(existing != null)
-                return@transaction
-            val weather = Weather.new {
-                time_updated_epoch = weatherData.time_updated_epoch
-                time_updated = weatherData.time_updated
-                condition_text = weatherData.condition_text
-                condition_icon = weatherData.condition_icon
-                condition_code = weatherData.condition_code
-                temp_c = weatherData.temp_c
-                wind_kph = weatherData.wind_kph
-                feelslike_c = weatherData.feelslike_c
-                vis_km = weatherData.vis_km
-                location_id = EntityID(weatherData.location_id, Locations)
+//            logger.info("Checking if there is data for ${weatherData.location_id} at ${weatherData.time_updated_epoch}")
+            if(existing == null) {
+                logger.info("Saving new weather")
+                val weather = Weather.new {
+                    time_updated_epoch = weatherData.time_updated_epoch
+                    time_updated = weatherData.time_updated
+                    condition_text = weatherData.condition_text
+                    condition_icon = weatherData.condition_icon
+                    condition_code = weatherData.condition_code
+                    temp_c = weatherData.temp_c
+                    wind_kph = weatherData.wind_kph
+                    feelslike_c = weatherData.feelslike_c
+                    vis_km = weatherData.vis_km
+                    location_id = EntityID(weatherData.location_id, Locations)
+                }
+                updated = true
+            }
+            else {
+//                logger.info("NOT saving new weather")
+//                logger.info("Exisiting weather id ==> ${existing.id}")
             }
         }
+        return updated
     }
 
     fun findWeatherInRange(city: Int, fromTime: Long) : List<WeatherDataObject> {
@@ -89,12 +117,17 @@ class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
 
     fun saveAnalyzedWeather(analyzedObject: AnalyzedWeatherDataObject) {
         transaction {
+            logger.info("Checking is there exists data with ${analyzedObject.prev_time_epoch} and ${analyzedObject.current_time_epoch}")
             val existing = AnalyzedWeather.find{
                 (AnalyzedWeatherSnapshots.prev_time_epoch eq analyzedObject.prev_time_epoch) and
-                        (AnalyzedWeatherSnapshots.current_time_epoch eq analyzedObject.current_time_epoch)
+                        (AnalyzedWeatherSnapshots.current_time_epoch eq analyzedObject.current_time_epoch) and
+                        (AnalyzedWeatherSnapshots.location_id eq analyzedObject.location_id)
+
             }.firstOrNull()
-            if(existing != null)
+            if(existing != null) {
+                logger.info("Found matching data with id ${existing.id}")
                 return@transaction
+            }
             val analyzedWeather = AnalyzedWeather.new {
                 location_id = EntityID(analyzedObject.location_id, Locations)
                 prev_time_epoch = analyzedObject.prev_time_epoch
@@ -108,6 +141,7 @@ class DataCollectorDataGateway(private val dbTemplate: DatabaseTemplate) {
                 prev_vis_km = analyzedObject.prev_vis_km
                 current_vis_km = analyzedObject.current_vis_km
             }
+            logger.info("Saved new weather with id ==> ${analyzedWeather.id}")
         }
     }
 

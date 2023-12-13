@@ -11,7 +11,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.junit.Before
 import org.junit.Ignore
-import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -27,6 +26,7 @@ class AppTest {
         every { getSystemEnv("DB_PASS") } returns "TestPass"
         every { getSystemEnv("DB_URL") } returns "localhost"
         every { getSystemEnv("DB_PORT") } returns "5555"
+        every { getSystemEnv("RABBIT_URL") } returns "localhost"
         every { getDbCollector("TestUser", "TestPass", "localhost", "5555") } returns testDbCollector
     }
 
