@@ -61,9 +61,6 @@ class ExampleWorker(
                     logger.info("Got weather info for " + location.name)
                     val response = it.readText()
                     val jsonObject = JSONObject(response)
-//                    logger.info("----------------------------------")
-//                    logger.info(jsonObject.toString(4))
-//                    logger.info("----------------------------------")
 
                     val currentObject = jsonObject.getJSONObject("current")
                     val conditionObject = currentObject.getJSONObject("condition")
@@ -82,13 +79,10 @@ class ExampleWorker(
                     )
 
                     dbCollector.saveWeather(weatherData)
-//                    if(dbCollector.saveWeather(weatherData)) {
+                    if(dbCollector.saveWeather(weatherData)) {
                         collectorMessagePublisher.publishNotification("${location.id}")
-//                        logger.info("publishing weather info for " + location.name)
-//                    }
-//                    else {
-//                        logger.info("Not publishing weather info for " + location.name)
-//                    }
+                        logger.info("publishing weather info for " + location.name)
+                    }
                 }
             }
         } catch (e: Exception) {
