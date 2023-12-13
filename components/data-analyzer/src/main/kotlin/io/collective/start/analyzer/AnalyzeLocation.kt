@@ -12,13 +12,13 @@ import java.time.Instant
 class AnalyzeLocation() {
     private val logger = LoggerFactory.getLogger(AnalyzeLocation::class.java)
 
-    private val dbUser = getSystemEnv("DB_USER")
+    private val dbUser = System.getenv("DB_USER")
         ?: throw RuntimeException("Please set the DB_USER environment variable")
-    private val dbPassword = getSystemEnv("DB_PASS")
+    private val dbPassword = System.getenv("DB_PASS")
         ?: throw RuntimeException("Please set the DB_PASS environment variable")
-    private val dbUrl = getSystemEnv("DB_URL")
+    private val dbUrl = System.getenv("DB_URL")
         ?: throw RuntimeException("Please set the DB_URL environment variable")
-    private val dbPort = getSystemEnv("DB_PORT")
+    private val dbPort = System.getenv("DB_PORT")
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
     private val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
 
