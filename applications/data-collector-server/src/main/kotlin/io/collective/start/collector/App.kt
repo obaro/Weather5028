@@ -32,6 +32,9 @@ fun Application.module() {
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
     val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
     val apiKey = System.getenv("WEATHER_API_KEY")
+    var weatherFetchDelay = System.getenv("WEATHER_FETCH_DELAY")?.toLong() ?: 120
+    if(weatherFetchDelay < 60)
+        weatherFetchDelay = 60
 
 
     val rabbitString = System.getenv("RABBIT_URL")
@@ -50,7 +53,7 @@ fun Application.module() {
     val collectorPublisher = CollectorMessagePublisher(publishFunction)
 
     val scheduler = WorkScheduler<ExampleTask>(ExampleWorkFinder(),
-        mutableListOf(ExampleWorker(collectorPublisher, dbCollector, apiKey)), 60)
+        mutableListOf(ExampleWorker(collectorPublisher, dbCollector, apiKey)), weatherFetchDelay)
     scheduler.start()
 }
 
