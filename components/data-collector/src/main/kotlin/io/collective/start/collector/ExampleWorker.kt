@@ -78,7 +78,6 @@ class ExampleWorker(
                         location_id = location.id
                     )
 
-                    dbCollector.saveWeather(weatherData)
                     if(dbCollector.saveWeather(weatherData)) {
                         collectorMessagePublisher.publishNotification("${location.id}")
                         logger.info("publishing weather info for " + location.name)
