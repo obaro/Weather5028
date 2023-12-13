@@ -2,6 +2,7 @@ package io.collective.start
 
 import freemarker.cache.ClassTemplateLoader
 import io.collective.data.getSystemEnv
+import io.collective.database.DataCollectorDataGateway
 import io.collective.database.getDbCollector
 import io.ktor.application.*
 import io.ktor.features.*
@@ -16,10 +17,7 @@ import io.ktor.util.pipeline.*
 import java.util.*
 
 fun Application.module(
-    dbUser: String,
-    dbPassword: String,
-    dbUrl: String,
-    dbPort: String) {
+    dbCollector: DataCollectorDataGateway) {
     install(DefaultHeaders)
     install(CallLogging)
     install(FreeMarker) {
@@ -34,7 +32,6 @@ fun Application.module(
             val parameters = call.receiveParameters()
             val city = parameters["city"]?: "London"
 
-            val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
             val location = dbCollector.findLocationByName(city)
 
             if(location != null) {
@@ -86,17 +83,18 @@ private fun PipelineContext<Unit, ApplicationCall>.headers(): MutableMap<String,
 
 fun main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    val port = getSystemEnv("PORT")?.toInt() ?: 8888
-    val dbUser = getSystemEnv("DB_USER")
+    val port = System.getenv("PORT")?.toInt() ?: 8888
+    val dbUser = System.getenv("DB_USER")
         ?: throw RuntimeException("Please set the DB_USER environment variable")
-    val dbPassword = getSystemEnv("DB_PASS")
+    val dbPassword = System.getenv("DB_PASS")
         ?: throw RuntimeException("Please set the DB_PASS environment variable")
-    val dbUrl = getSystemEnv("DB_URL")
+    val dbUrl = System.getenv("DB_URL")
         ?: throw RuntimeException("Please set the DB_URL environment variable")
-    val dbPort = getSystemEnv("DB_PORT")
+    val dbPort = System.getenv("DB_PORT")
         ?: throw RuntimeException("Please set the DB_PORT environment variable")
+    val dbCollector = getDbCollector(dbUser, dbPassword, dbUrl, dbPort)
     embeddedServer(Netty, port, watchPaths = listOf("basic-server"),
         module = { module(
-            dbUser, dbPassword, dbUrl, dbPort
+            dbCollector
         ) }).start()
 }
