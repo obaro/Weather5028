@@ -22,8 +22,7 @@ fun Application.module() {
     }
 
     val rabbitString = System.getenv("RABBIT_URL")
-//        val rabbitString = "amqps://mqptuobn:Tx5fNr-2SUceZKhCo8Q_BeIdBxKsmjK8@mouse.rmq5.cloudamqp.com/mqptuobn"
-        ?: throw RuntimeException("Please set the RABBIT_URL environment variable NOW")
+        ?: throw RuntimeException("Please set the RABBIT_URL environment variable")
     val connectionFactory = buildConnectionFactory(rabbitString.let(::URI)
         ?: throw RuntimeException("$rabbitString is NOT a valid URI"))
 

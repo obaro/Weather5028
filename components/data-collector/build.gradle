@@ -5,6 +5,5 @@ dependencies {
     implementation project(":components:database-support")
     implementation project(":components:rabbit-support")
     implementation project(":components:data-objects")
-
     implementation 'org.json:json:20231013'
 }
